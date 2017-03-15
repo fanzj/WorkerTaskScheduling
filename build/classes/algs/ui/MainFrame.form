@@ -81,7 +81,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="jPanel1" pref="0" max="32767" attributes="0"/>
+                          <Component id="jPanel1" pref="334" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
@@ -227,10 +227,15 @@
             <Component class="javax.swing.JComboBox" name="jComboBox2">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
+                  <StringArray count="8">
                     <StringItem index="0" value="data_01"/>
                     <StringItem index="1" value="data_02"/>
                     <StringItem index="2" value="data_03"/>
+                    <StringItem index="3" value="data_04"/>
+                    <StringItem index="4" value="data_05"/>
+                    <StringItem index="5" value="data_06"/>
+                    <StringItem index="6" value="data_07"/>
+                    <StringItem index="7" value="data_08"/>
                   </StringArray>
                 </Property>
               </Properties>

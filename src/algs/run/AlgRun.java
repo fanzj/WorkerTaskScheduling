@@ -24,7 +24,7 @@ public class AlgRun {
     private int m;// 共有m个任务，即染色体的长度
     private int n;// 共有n个工人，即基因的值为（1~n）,m>n
     private int MAX_T;// 最大进化代数
-    private GABean bestSolution;// 最优解
+    public GABean bestSolution;// 最优解
 
     private double[][] T1;// 任务i由维修工j完成的时间是T1[i][j],m*n
     private double[] T2;// 从公司到任务i所在地需要的时间是T2[i],1*m

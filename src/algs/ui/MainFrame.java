@@ -5,11 +5,14 @@
  */
 package algs.ui;
 
+import algs.bean.GABean;
 import algs.bean.OptimalBean;
 import algs.bean.TimeSettings;
 import algs.config.NameSpace;
 import algs.run.AlgRun;
 import algs.utils.FileUtils;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -109,7 +112,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("数据读入"));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "data_01", "data_02", "data_03" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "data_01", "data_02", "data_03", "data_04", "data_05", "data_06", "data_07", "data_08" }));
 
         jTextArea3.setColumns(20);
         jTextArea3.setRows(5);
@@ -206,7 +209,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(mainJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainJPanelLayout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, Short.MAX_VALUE)
                         .addGap(11, 11, 11))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainJPanelLayout.createSequentialGroup()
                         .addGroup(mainJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -288,8 +291,54 @@ public class MainFrame extends javax.swing.JFrame {
             case NameSpace.NUM_WWO:
             {
                 if(timeSettings!=null){
-                    AlgRun algRun = new AlgRun(timeSettings);
-                    String result = algRun.solve();
+                   AlgRun gaRun = null,best = null;
+                   double sum = 0.0;
+                   double fmin = Double.MAX_VALUE;
+                   double fmax = Double.MIN_VALUE;
+                   long start = System.currentTimeMillis();//起始时间
+                   int runs = 30;//运行次数
+                   List<GABean> results = new ArrayList<>();//保存每次运行的最优解
+                   for(int i=0;i<runs;i++){
+                       gaRun = new AlgRun(timeSettings);
+                       gaRun.solve();
+                       sum += gaRun.bestSolution.getFitness();
+                       if(Double.compare(fmin, gaRun.bestSolution.getFitness())>0){
+                           fmin = gaRun.bestSolution.getFitness();
+                           best = gaRun;
+                       }
+                       if(Double.compare(fmax, gaRun.bestSolution.getFitness())<0){
+                           fmax = gaRun.bestSolution.getFitness();
+                       }
+                       results.add(gaRun.bestSolution);
+                   }
+                   long end = System.currentTimeMillis();
+                   long time = (end - start)/1000;//转换为秒
+                   String usedtime = "运行耗时："+String.format("%02d", time/3600)+":"+ String.format("%02d",(time % 3600) / 60) + ":" + String.format("%02d", (time % 60)) + "\n";
+                   
+                   String result = "";//试验显示结果
+                   GABean bestSolution = best.bestSolution;
+                   double std = 0.0;
+                   double mean = sum / runs;
+                   result += "最佳代数："+ bestSolution.getCur_t()+"\n";
+                   result += "最小耗时："+String.format("%.3f", fmin)+"s\n平均耗时："+String.format("%.3f", mean)+"s\n";
+                    for (int i = 0; i < runs; i++) {
+			GABean solution = results.get(i);
+			std += (solution.getFitness() - mean) * (solution.getFitness() - mean);
+                    }
+                    result += "标准差值：" + String.format("%.3f", Math.sqrt(std / (runs - 1))) + "\n";
+                    result += usedtime;
+                    result += "最佳分配：\n";
+              
+		
+                    int[] allocation = bestSolution.getStrategy();
+                    for (int i = 0; i < allocation.length; i++) {
+                        result += allocation[i];
+                        if(i<allocation.length-1)
+                            result += " ";
+                        else
+                            result += "\n";
+                    }
+
                     jTextArea2.setText(result);
                 }
                
@@ -313,20 +362,50 @@ public class MainFrame extends javax.swing.JFrame {
         switch(index){
             case 0:
             {
-                m = 5;
-                n = 3;
+                m = 20;
+                n = 5;
             }
             break;
             case 1:
             {
-                m = 10;
-                n = 5;
+                m = 80;
+                n = 8;
             }
             break;
             case 2:
             {
-                m = 20;
-                n = 7;
+                m = 160;
+                n = 15;
+            }
+            break;
+            case 3:
+            {
+                m = 240;
+                n = 22;
+            }
+            break;
+            case 4:
+            {
+                m = 320;
+                n = 32;
+            }
+            break;
+            case 5:
+            {
+                m = 400;
+                n = 40;
+            }
+            break;
+            case 6:
+            {
+                m = 480;
+                n = 45;
+            }
+            break;
+            case 7:
+            {
+                m = 560;
+                n = 55;
             }
             break;
         }
